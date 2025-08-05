@@ -3,7 +3,7 @@ import { TIngredient } from '../../utils/types';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ConstructorIngredient extends TIngredient {
-  uniqueId: string;
+  id: string;
 }
 
 interface ConstructorState {
@@ -20,22 +20,24 @@ const constructorSlice = createSlice({
   name: 'constructor',
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
+    addIngredient: (
+      state,
+      action: PayloadAction<TIngredient | ConstructorIngredient>
+    ) => {
       const ingredient = action.payload;
 
       if (ingredient.type === 'bun') {
         state.bun = ingredient;
       } else {
-        state.ingredients.push({
-          ...ingredient,
-          uniqueId: uuidv4()
-        });
+        if ('id' in ingredient) {
+          state.ingredients.push(ingredient as ConstructorIngredient);
+        }
       }
     },
 
     removeIngredient: (state, action: PayloadAction<string>) => {
       state.ingredients = state.ingredients.filter(
-        (item) => item.uniqueId !== action.payload
+        (item) => item.id !== action.payload
       );
     },
 
@@ -57,11 +59,19 @@ const constructorSlice = createSlice({
   }
 });
 
-export const {
-  addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor
-} = constructorSlice.actions;
+export const addIngredientAction = (ingredient: TIngredient) => {
+  if (ingredient.type === 'bun') {
+    return constructorSlice.actions.addIngredient(ingredient);
+  } else {
+    const ingredientWithId: ConstructorIngredient = {
+      ...ingredient,
+      id: uuidv4()
+    };
+    return constructorSlice.actions.addIngredient(ingredientWithId);
+  }
+};
+
+export const { removeIngredient, moveIngredient, clearConstructor } =
+  constructorSlice.actions;
 
 export default constructorSlice.reducer;

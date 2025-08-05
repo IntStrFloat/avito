@@ -15,11 +15,11 @@ export const Feed: FC = () => {
   const { ingredients, isLoading: isLoadingIngredients } = useSelector(
     (state) => state.ingredients
   );
-  useEffect(() => {
-    if (ingredients.length === 0 && !isLoadingIngredients) {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, ingredients.length, isLoading]);
+  // useEffect(() => {
+  //   if (ingredients.length === 0 && !isLoadingIngredients) {
+  //     dispatch(fetchIngredients());
+  //   }
+  // }, [dispatch, ingredients.length, isLoading]);
 
   useEffect(() => {
     if (orders.length === 0 && !isLoading) {

@@ -18,7 +18,7 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { error, isLoading } = useSelector((state) => state.user);
+  const error = useSelector((state) => state.user.error);
 
   const state = location.state as LocationState;
   const from = state?.from?.pathname || '/';

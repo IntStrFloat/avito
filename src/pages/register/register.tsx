@@ -12,7 +12,7 @@ export const Register: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error, isLoading } = useSelector((state) => state.user);
+  const error = useSelector((state) => state.user.error);
 
   const handleSubmit = async (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
